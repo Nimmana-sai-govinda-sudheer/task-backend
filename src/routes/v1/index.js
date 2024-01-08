@@ -1,12 +1,13 @@
 const Router = require('express')
 const AuthRoutes = require('../../Authentication/AuthRoutes.routes')
-const userRoutes = require('../../signup/sign_up.route')
+const userRoutes = require('../../sign_user/sign_user.route')
 const router = Router()
 const userTasks=require('../../tasks/tasks.route');
 const userprofile=require('../../profile/profile.route');
 const settings=require('../../settings/settings.route')
 
-const signup=require('../../signup/sign_up.route')
+const chart=require('../../piechart/piechart.route')
+
 
 
 
@@ -32,5 +33,15 @@ router.use('/profile',userprofile);
  */
 
 router.use('/settings',settings);
+
+
+/**
+ * for piecharts 
+ */
+
+router.use('/chart',chart);
+
+
+
 
 module.exports = router

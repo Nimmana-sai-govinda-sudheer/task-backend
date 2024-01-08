@@ -1,18 +1,16 @@
 
 const bcrypt = require('bcrypt')
-const UserModel = require('./Sign_up.model')
-const ApiError = require('../../src/config/APIError')
+const UserModel = require('./Sign_user.model')
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
+const logger = require('../config/logger');
 
 const HTTP_STATUS = require('../constants/http.constants')
-const CustomError = require('../error-handlers/custom.errpr');
-class signupservice {
+const CustomError = require('../error-handlers/custom.error');
+class signuserservice {
 
     /**
 * @method signup
-* @param {*} req 
-* @param {*} res 
 * @description to take user details and save in db for signup.
 * @returns returns usercontactDetails Taken successfully  when userdetails are added successfully
 */
@@ -21,7 +19,7 @@ class signupservice {
     async signup(userDetails) {
         try {
 
-
+            logger.info('Inside  signuserservice: signup method');
             // hashing password using bvrypt library
             const hashedPassword = await bcrypt.hash(userDetails.password, 10)
             // saving the hashed password in data base
@@ -35,6 +33,8 @@ class signupservice {
         }
 
         catch (error) {
+
+            logger.error(`Inside  : update method: Error occured while saving usersignup details in db ${error.message}`);
             throw new CustomError((error instanceof CustomError) ? error.message : 'Error! Please try again.', error.statusCode);
         }
     }
@@ -42,8 +42,6 @@ class signupservice {
 
     /**
 * @method signinUser
-* @param {*} req 
-* @param {*} res 
 * @description to take user details and save in db for signin.
 * @returns returns Sign in success when user sigin successfully
 */
@@ -51,6 +49,7 @@ class signupservice {
     async signinUser(userDetails) {
         try {
 
+            logger.info('Inside  signuserservice: signinUser method');
             const user = await UserModel.findOne({ email: userDetails.email });
             if (!user) {
                 throw new CustomError('please sign up', HTTP_STATUS.UNAUTHORIZED);
@@ -74,11 +73,12 @@ class signupservice {
         }
 
         catch (error) {
-
+              
+            logger.error(`Inside  : update method: Error occured while checking userdetails in db ${error.message}`);
             throw new CustomError((error instanceof CustomError) ? error.message : 'Error! Please try again.', error.statusCode);
         }
     }
 
 }
 
-module.exports = new signupservice();
+module.exports = new signuserservice();

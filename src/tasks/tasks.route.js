@@ -11,14 +11,24 @@ const Auth = require("../middlewares/Auth.middleware")
  * for updating users password
  */
 
-router.get('/details', Auth.authUser, userController.gettasks);
+router.get('/taskDetails', Auth.authUser, userController.gettasks);
+
+
+// router.get('/tasksByKey',Auth.authUser,userController.getTasksByKey);
 
 
 
-router.post('/save', Auth.authUser, userController.savetasks);
+router.get('/detailsById/:taskId', Auth.authUser, userController.gettasksById);
+//details
 
 
-router.put('/update', Auth.authUser, userController.updatetasks);
+router.post('/saveTask', Auth.authUser, userController.savetasks);
+
+
+router.put('/updateTask/:taskId', Auth.authUser, userController.updatetasks);
+
+
+router.delete('/deleteById/:taskId',Auth.authUser,userController.deleteTask);
 
 
 

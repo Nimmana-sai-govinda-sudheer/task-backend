@@ -11,6 +11,7 @@ const cors = require('cors');
 const httpStatus = require('http-status');
 const config = require('./src/config/config');
 const morgan = require('./src/config/morgan');
+const logger=require('./src/config/logger')
 
 const routes = require('./src/routes/v1/index');
 
@@ -61,6 +62,11 @@ app.use('/v1', routes);
 
 
 
+//
+app.use((req, res, next) => {
+    logger.info(`${req.method} ${req.url}`);
+    next();
+  });
 
 
 
