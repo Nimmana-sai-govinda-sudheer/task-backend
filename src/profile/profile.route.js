@@ -24,5 +24,7 @@ router.get('/details', Auth.authUser,profileController.getDetailst);
 module.exports=router;
 
 
+// $$$$$$$$$$$
+
 
 
