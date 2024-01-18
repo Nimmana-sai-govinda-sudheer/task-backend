@@ -4,10 +4,6 @@ const settingscontroller = require('./settings.controller');
 const Auth = require("../middlewares/Auth.middleware")
 
 
-
-
-
-
 /**
  * for updating users password
  */

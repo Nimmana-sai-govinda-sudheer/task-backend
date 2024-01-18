@@ -33,6 +33,13 @@ const TasksSchema = new Schema({
     type: String,
     trim: true,
   },
+
+  role: {
+    type: String,
+    trim: true,
+  }
+
+
 });
 
 const Tasks = mongoose.model('Tasks', TasksSchema);

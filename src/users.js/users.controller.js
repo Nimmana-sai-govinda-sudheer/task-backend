@@ -1,47 +1,47 @@
 
 
-const CustomError = require('../error-handlers/custom.error')
+const CustomError = require('../error-handlers/custom.error');
 
 const Default = require('../config/Default');
 
-const piechartservice = require('../piechart/piechart.service');
+const allUsersService = require('./users.service')
 
 const HTTP_STATUS = require('../constants/http.constants')
 const logger = require('../config/logger');
 
 
-class piechartcontoller extends Default {
+class allUsersController extends Default {
+
 	constructor() {
 		super();
 	}
+
 	/**
-* @method getDetailst
+* @method allUsers
 * @param {*} req express request handler to handle requests
 * @param {*} res res express response handler to handle response
 * @description to retrieve users details
 * @returns returns successfull response when user details are retrieved successfully
 */
-	async getDetailst(req, res) {
+	async allUsers(req, res) {
 		try {
 
+			logger.info('Inside  allUsersController: allUsers method');
 
-			logger.info('Inside piechartcontroller: getDetailst method');
-
-			console.log(req.payload.user._id, "mounii")
-			console.log(req.query.taskId, "mounik")
-
-			const response = await piechartservice.getDetailst(req.payload.user._id, req.query.taskId);
+			const response = await allUsersService.allUsers(req.payload.user._id, req.query.offset, req.query.limit, req.payload.user.role,);
 
 			if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
 
 			return res.status(HTTP_STATUS.OK).json({
 				message: response.message,
 				data: response.data,
-				status: response.status
+				status: response.status,
+				count: response.count,
+				role: response.role
 			});
 		}
 		catch (error) {
-			logger.error(`Inside piechartcontroller: getDetailst method: Error occured while getting piechart Details ${error.message}`);
+			logger.error(`Inside allUsersController : allUsers method: Error occured while getting allUsers Details ${error.message}`);
 			if (error instanceof CustomError)
 				return res.status(error.statusCode).json({
 					status: false,
@@ -57,4 +57,4 @@ class piechartcontoller extends Default {
 
 }
 
-module.exports = new piechartcontoller();
+module.exports = new allUsersController();

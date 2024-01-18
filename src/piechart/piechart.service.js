@@ -12,10 +12,25 @@ class piechartservice {
 */
 
 
-    async getDetailst(user_id) {
+    async getDetailst(user_id, taskId) {
         try {
             // logger.info('Inside piechartservu: getDetailst method');
-            const details = await pieChartModel.find({ user_id: user_id }, { name: 1, y: 1 })
+            let userId = null;
+
+            console.log("sudheeeer")
+            if (taskId == 'null') userId = user_id;
+            else userId = taskId;
+
+
+            var details = await pieChartModel.find({ user_id: userId }, { name: 1, y: 1, Status: 1 })
+
+            console.log(details, "dddddddddddddddddd")
+
+            console.log(typeof (details), "aaaaaaaaaaaaaaaaaaaaa")
+
+            if (details.length == 0) {
+                var details = [{ name: ' ', y: 0, status: ' ' }]
+            }
 
             return {
                 status: true,
@@ -25,7 +40,7 @@ class piechartservice {
         }
         catch (error) {
 
-            console.log(error,"erorrororor");
+            console.log(error, "erorrororor");
 
             // logger.error(`Inside piechartservice: getDetailst method: Error occured while fetching data from db ${error.message}`);
             throw new CustomError((error instanceof CustomError) ? error.message : 'Error! Please try again.', error.statusCode);

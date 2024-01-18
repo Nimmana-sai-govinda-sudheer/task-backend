@@ -8,8 +8,8 @@ const Auth = require("../middlewares/Auth.middleware")
  * for retrieving details for piechart 
  */
 
-router.get('/chartdetails', Auth.authUser,pieChartController.getDetailst);
+router.get('/chartdetails', Auth.authUser, pieChartController.getDetailst);
 
 
-module.exports=router;
+module.exports = router;
 

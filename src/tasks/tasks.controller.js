@@ -6,36 +6,31 @@ const HTTP_STATUS = require('../constants/http.constants')
 
 class taskscontroller {
 
-    /**
+	/**
 * @method gettasks
 * @param {*} req express request handler to handle requests
 * @param {*} res res express response handler to handle response
 * @description to retrieve users  tasks from db
 * @returns returns successfull response when tasks details  are retrieved successfully
 */
-    async gettasks(req, res) {
-        try {
+	async gettasks(req, res) {
+		try {
 			logger.info('Inside  taskscontroller: gettasks method');
 
-            const response = await userTasks.gettasks(req.payload.user,req.query.offset,req.query.limit)
+			const response = await userTasks.gettasks(req.payload.user._id, req.query.offset, req.query.limit, req.query.status, req.payload.user.role, req.query.taskId);
 
-			console.log(req.query.offset,"sudheer")
-
-			console.log(req.query.limit,"nikhil");
-
-		
-
-            if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
+			if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
 
 			return res.status(HTTP_STATUS.OK).json({
 				message: response.message,
-				// data: response.data.slice(startIndex,endIndex),
-				data:response.data,
-				status: response.status
+				data: response.data,
+				count: response.count,
+				status: response.status,
+				role: response.role
 			});
 
-        } 
-        catch (error) {
+		}
+		catch (error) {
 
 			// logger.error(`Inside taskscontroller : gettasks method: Error occured while retrieving users task ${error.message}`);
 			if (error instanceof CustomError)
@@ -49,10 +44,10 @@ class taskscontroller {
 				message: this.error
 			});
 		}
-    }
+	}
 
 
-    /**
+	/**
 * @method savetasks
 * @param {*} req express request handler to handle requests
 * @param {*} res res express response handler to handle response
@@ -60,24 +55,24 @@ class taskscontroller {
 * @returns returns successfull response when tasks details  are addded successfully
 */
 
-    async savetasks(req, res) {
-        try {
+	async savetasks(req, res) {
+		try {
 
 			logger.info('Inside  taskscontroller: savetasks method');
-            const response = await userTasks.savetasks(req.body, req.payload.user._id)
+			const response = await userTasks.savetasks(req.body, req.payload.user._id)
 
 
-            
-            if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
+
+			if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
 
 			return res.status(HTTP_STATUS.OK).json({
 				message: response.message,
 				status: response.status
 			});
 
-        } 
-        catch (error) {
-			
+		}
+		catch (error) {
+
 			logger.error(`Inside taskscontroller : savetasks method: Error occured while saving users task ${error.message}`);
 			if (error instanceof CustomError)
 				return res.status(error.statusCode).json({
@@ -90,34 +85,32 @@ class taskscontroller {
 				message: this.error
 			});
 		}
-    }
+	}
 
 
-    /**
+	/**
 * @method updatetasks
 * @param {*} req express request handler to handle requests
 * @param {*} res res express response handler to handle response
 * @description for updating  of tasks in db
 * @returns returns successfull response when tasks details  are updated successfully
 */
-    async updatetasks(req, res) {
-        try {
-              
-			logger.info('Inside  taskscontroller: updatetasks method');
-            const response = await userTasks.updatetasks(req.params.taskId,req.body)
+	async updatetasks(req, res) {
+		try {
 
-			console.log(req.body);
-            
-            if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
+			logger.info('Inside  taskscontroller: updatetasks method');
+			const response = await userTasks.updatetasks(req.params.taskId, req.body)
+
+			if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
 
 			return res.status(HTTP_STATUS.OK).json({
 				message: response.message,
 				status: response.status
 			});
 
-        } 
-        catch (error) {
-				
+		}
+		catch (error) {
+
 			logger.error(`Inside taskscontroller : updatetasks method: Error occured while updating users task ${error.message}`);
 			if (error instanceof CustomError)
 				return res.status(error.statusCode).json({
@@ -130,85 +123,84 @@ class taskscontroller {
 				message: this.error
 			});
 		}
-    }
+	}
 
- /**
-* @method gettasksById
-* @param {*} req express request handler to handle requests
-* @param {*} res res express response handler to handle response
-* @description for updating  of tasks in db
-* @returns returns successfull response when particular  user id details are retrieved successfully.
-*/
-async gettasksById(req, res) {
-	try {
-		  
-		logger.info('Inside  taskscontroller: gettasksById method');
-		const response = await userTasks.gettasksById(req.params.taskId)
-		
-		if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
+	/**
+   * @method gettasksById
+   * @param {*} req express request handler to handle requests
+   * @param {*} res res express response handler to handle response
+   * @description for updating  of tasks in db
+   * @returns returns successfull response when particular  user id details are retrieved successfully.
+   */
+	async gettasksById(req, res) {
+		try {
 
-		return res.status(HTTP_STATUS.OK).json({
-			message: response.message,
-			status: response.status,
-			data:response.data
-		});
+			logger.info('Inside  taskscontroller: gettasksById method');
+			const response = await userTasks.gettasksById(req.params.taskId)
 
-	} 
-	catch (error) {
-			
-		logger.error(`Inside taskscontroller : gettasksById method: Error occured while updating users task ${error.message}`);
-		if (error instanceof CustomError)
-			return res.status(error.statusCode).json({
-				status: false,
-				message: error.message || this.error
+			if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
+
+			return res.status(HTTP_STATUS.OK).json({
+				message: response.message,
+				status: response.status,
+				data: response.data
 			});
 
-		return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-			status: false,
-			message: this.error
-		});
-	}
-}
+		}
+		catch (error) {
 
+			logger.error(`Inside taskscontroller : gettasksById method: Error occured while updating users task ${error.message}`);
+			if (error instanceof CustomError)
+				return res.status(error.statusCode).json({
+					status: false,
+					message: error.message || this.error
+				});
 
-/**
-* @method deleteTask
-* @param {*} req express request handler to handle requests
-* @param {*} res res express response handler to handle response
-* @description for updating  of tasks in db
-* @returns returns successfull response when particular  user id details are retrieved successfully.
-*/
-async   deleteTask(req, res) {
-	try {
-		  
-		logger.info('Inside  taskscontroller: gettasksById method');
-		const response = await userTasks.deleteTask(req.params.taskId)
-
-		console.log(req.params.taskId,"sudheer")
-		
-		if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
-
-		return res.status(HTTP_STATUS.OK).json({
-			message: response.message,
-			status: response.status,
-		});
-
-	} 
-	catch (error) {
-			
-		logger.error(`Inside taskscontroller : gettasksById method: Error occured while updating users task ${error.message}`);
-		if (error instanceof CustomError)
-			return res.status(error.statusCode).json({
+			return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
 				status: false,
-				message: error.message || this.error
+				message: this.error
+			});
+		}
+	}
+
+
+	/**
+	* @method deleteTask
+	* @param {*} req express request handler to handle requests
+	* @param {*} res res express response handler to handle response
+	* @description for updating  of tasks in db
+	* @returns returns successfull response when particular  user id details are retrieved successfully.
+	*/
+	async deleteTask(req, res) {
+		try {
+
+			logger.info('Inside  taskscontroller: deleteTask method');
+			const response = await userTasks.deleteTask(req.params.taskId)
+
+
+			if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
+
+			return res.status(HTTP_STATUS.OK).json({
+				message: response.message,
+				status: response.status,
 			});
 
-		return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-			status: false,
-			message: this.error
-		});
+		}
+		catch (error) {
+
+			logger.error(`Inside taskscontroller : deleteTask method: Error occured while updating users task ${error.message}`);
+			if (error instanceof CustomError)
+				return res.status(error.statusCode).json({
+					status: false,
+					message: error.message || this.error
+				});
+
+			return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+				status: false,
+				message: this.error
+			});
+		}
 	}
-}
 
 }
 

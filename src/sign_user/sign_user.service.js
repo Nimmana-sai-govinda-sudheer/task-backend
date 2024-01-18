@@ -26,6 +26,7 @@ class signuserservice {
             userDetails['password'] = hashedPassword
             const UserModelData = new UserModel(userDetails)
             const newUser = await UserModelData.save();
+
             return {
                 status: true,
                 message: 'usercontactDetails Taken successfully',
@@ -58,12 +59,14 @@ class signuserservice {
             const isValidUser = await bcrypt.compare(userDetails.password, user.password);
             if (isValidUser) {
                 // Generate a JWT token if the password is valid
+
                 const token = jwt.sign({ user }, config.jwt.secret);
 
                 return {
                     status: true,
                     message: 'Sign in success',
-                    data: token
+                    data: token,
+                    // users:allUsers
                 };
             }
 
@@ -73,7 +76,7 @@ class signuserservice {
         }
 
         catch (error) {
-              
+
             logger.error(`Inside  : update method: Error occured while checking userdetails in db ${error.message}`);
             throw new CustomError((error instanceof CustomError) ? error.message : 'Error! Please try again.', error.statusCode);
         }

@@ -40,7 +40,15 @@ const userSchema = new Schema({
   Address: {
     type: String,
     trim: true,
+  },
+  
+  role:{
+       type:String,
+       trim:true,
+       default: 'people',
+
   }
+
 });
 
 const User = mongoose.model('users', userSchema);

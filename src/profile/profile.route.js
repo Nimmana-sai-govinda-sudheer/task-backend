@@ -4,13 +4,10 @@ const profileController = require('./profile.controller');
 const Auth = require("../middlewares/Auth.middleware")
 
 
-
-
-
 /**
  * for saving users details 
  */
-router.put('/save', Auth.authUser,profileController.updatedetails);
+router.put('/save', Auth.authUser, profileController.updatedetails);
 
 
 
@@ -18,10 +15,10 @@ router.put('/save', Auth.authUser,profileController.updatedetails);
  * for retrieving users details 
  */
 
-router.get('/details', Auth.authUser,profileController.getDetailst);
+router.get('/details/:taskId', Auth.authUser, profileController.getDetailst);
 
 
-module.exports=router;
+module.exports = router;
 
 
 // $$$$$$$$$$$

@@ -10,8 +10,6 @@ const HTTP_STATUS = require('../constants/http.constants')
 
 class profilecontoller extends Default {
 
-
-
 	constructor() {
 		super();
 	}
@@ -68,7 +66,9 @@ class profilecontoller extends Default {
 
 			logger.info('Inside profilecontroller: getDetailst method');
 
-			const response = await profileservice.getDetailst(req.payload.user._id);
+			console.log(typeof (req.params.taskId), "typeeeeeeeeeeeeeeeeeeeeeeeee")
+
+			const response = await profileservice.getDetailst(req.payload.user._id, req.params.taskId);
 
 			if (!response) throw new CustomError('Error! Please try after some time.', HTTP_STATUS.INTERNAL_SERVER_ERROR);
 
